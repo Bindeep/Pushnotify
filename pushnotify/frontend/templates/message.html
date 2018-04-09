@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+</head>
+<body>
+{% if user.is_superuser %}
+<div class="container">
+        <form action="{% url 'send' %}" method="post"> {% csrf_token %}
+            <label for="formGroupExampleInput">Message</label>
+            <textarea class="form-control" rows="5" id="comment1" name="message"></textarea>
+            <br>
+            <label for="exampleFormControlSelect1">Select User/Group</label>
+                <select multiple class="form-control" id="Users" name="users">
+                    <optgroup label="Users">
+                    {% for user in users %}
+                        <option value="{{ user.username }}">{{ user }}</option>
+                    {% endfor %}
+                    </optgroup>
+                </select>
+                <select multiple class="form-control" id="Groups" name="groups">
+                    <optgroup label="Groups">
+                    {% for group in groups %}
+                        <option value="{{ group.name }}">{{ group }}</option>
+                    {% endfor %}
+                    </optgroup>
+                </select>
+            <br>
+            <button type="submit" class="btn btn-success">Send Message</button>
+            <span class="col-lg-2">
+                <button type="submit" class="btn btn-info">Schedule Message</button>
+            </span>
+        </form>
+</div>
+{% else %}
+<h1>Only super user can send messages</h1>
+{% endif %}
+</body>
+</html>
