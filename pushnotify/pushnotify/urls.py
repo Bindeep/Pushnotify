@@ -18,7 +18,7 @@ from django.contrib import admin
 from fcm_django.api.rest_framework import FCMDeviceViewSet, FCMDeviceAuthorizedViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
-from .views import send_message, IndexView
+from .views import IndexView, SendMessage
 
 router = DefaultRouter()
 router.register(r'devices', FCMDeviceViewSet)
@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^docs/', include_docs_urls(title='FCM django web demo')),
     url(r'^', include(router.urls)),
-    url(r'^send_message', send_message, name="send"),
+    # url(r'^send_message', send_message, name="send"),
+    url(r'^send_message', SendMessage.as_view(), name="send"),
     url(r'^users', IndexView.as_view(), name='home'),
 ]

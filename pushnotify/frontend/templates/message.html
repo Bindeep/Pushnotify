@@ -1,39 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 </head>
 <body>
 {% if user.is_superuser %}
 <div class="container">
-        <form action="{% url 'send' %}" method="post"> {% csrf_token %}
-            <label for="formGroupExampleInput">Message</label>
-            <textarea class="form-control" rows="5" id="comment1" name="message"></textarea>
-            <br>
-            <label for="exampleFormControlSelect1">Select User/Group</label>
-                <select multiple class="form-control" id="Users" name="users">
-                    <optgroup label="Users">
-                    {% for user in users %}
-                        <option value="{{ user.username }}">{{ user }}</option>
-                    {% endfor %}
-                    </optgroup>
-                </select>
-                <select multiple class="form-control" id="Groups" name="groups">
-                    <optgroup label="Groups">
-                    {% for group in groups %}
-                        <option value="{{ group.name }}">{{ group }}</option>
-                    {% endfor %}
-                    </optgroup>
-                </select>
-            <br>
-            <button type="submit" class="btn btn-success">Send Message</button>
-            <span class="col-lg-2">
-                <button type="submit" class="btn btn-info">Schedule Message</button>
-            </span>
-        </form>
+    <form action="{% url 'send' %}" method="post"> {% csrf_token %}
+        <label for="formGroupExampleInput">Message</label>
+        <textarea class="form-control" rows="5" id="comment1" name="message"></textarea>
+        <br>
+        <label for="exampleFormControlSelect1">Select User/Group</label>
+        <select multiple class="form-control" id="Users" name="users">
+            <optgroup label="Users">
+                {% for user in users %}
+                    <option value="{{ user.username }}">{{ user }}</option>
+                {% endfor %}
+            </optgroup>
+        </select>
+        <select multiple class="form-control" id="Groups" name="groups">
+            <optgroup label="Groups">
+                {% for group in groups %}
+                    <option value="{{ group.name }}">{{ group }}</option>
+                {% endfor %}
+            </optgroup>
+        </select>
+        <br>
+        <div class="row" id="datefield" style="display:none">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label for="datetimepicker1">Schedule DateTime</label>
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" name="date"/>
+                        <span class="input-group-addon">
+	            <span class="glyphicon glyphicon-calendar"></span>
+	          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <span class="col-lg-2">
+        <button type="submit" class="btn btn-success btn-lg">Send Message</button></span>
+    </form>
+        <span class="col-lg-0">
+            <button type="submit" class="btn btn-info btn-lg" id="schedule">Schedule Message</button>
+        </span>
 </div>
 {% else %}
 <h1>Only super user can send messages</h1>
 {% endif %}
 </body>
+<script type="text/javascript">
+
+    $(function() {
+        $('#datetimepicker1').datetimepicker();
+    });
+    $("#schedule").click(function(){
+    $("#datefield").show();
+    $("#schedule").hide();
+});
+
+</script>
 </html>

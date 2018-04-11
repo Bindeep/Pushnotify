@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'fcm_django',
+    'pushnotify',
     'corsheaders',
     'sslserver',
+    'djcelery',
+    'kombu.transport.django',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -145,10 +148,30 @@ PROJECT_APP = os.path.basename(BASE_DIR)
 f = os.path.join(PROJECT_APP, 'local_settings.py')
 if os.path.exists(f):
     import sys
-    import imp
+    import importlib
     module_name = '%s.local_settings' % PROJECT_APP
-    module = imp.new_module(module_name)
+    module = importlib.new_module(module_name)
     module.__file__ = f
     sys.modules[module_name] = module
     exec(open(f, 'rb').read())
 
+
+RQ_QUEUES = {
+    'default': {
+        'USE_REDIS_CACHE': 'default',
+    },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'django://'
