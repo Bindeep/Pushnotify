@@ -49,6 +49,6 @@ class SendMessage(View):
                     return HttpResponse('Write some message to send')
                 return HttpResponse('Scheduled Message')
             else:
-                return HttpResponse('Please Choose time from futue')
+                return HttpResponse('Please Choose time onwards')
         else:
             return send(self)
